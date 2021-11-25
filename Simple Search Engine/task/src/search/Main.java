@@ -8,9 +8,7 @@ public class Main {
 
     private enum Strategy{ALL, ANY, NONE}
 
-    private static Strategy strategy;
-
-    private static Scanner sc = new Scanner(System.in);
+    private static final Scanner sc = new Scanner(System.in);
 
 
     public static void main(String[] args)  throws FileNotFoundException {
@@ -22,7 +20,6 @@ public class Main {
         Map<String, List<Integer>> dataMap = getMappedData(data);
 
         startEngine(data, dataMap);
-
 
         sc.close();
 
@@ -131,6 +128,7 @@ public class Main {
         System.out.println("Select a matching strategy: ALL, ANY, NONE");
         String strStrategy = sc.nextLine();
 
+        Strategy strategy;
         switch (strStrategy){
             case "ALL":
                 strategy = Strategy.ALL;
@@ -193,7 +191,7 @@ public class Main {
 
         Set<Integer> setInd = new TreeSet<>();
 
-        for(String target: targets.split(" ")) {    // cases check
+        for(String target: targets.split(" ")) {
 
             List<Integer> list = dataMap.get(target.toLowerCase(Locale.ROOT));
 
@@ -257,7 +255,6 @@ public class Main {
             String s2 = target.toLowerCase(Locale.ROOT);
 
             if (s1.contains(s2)){
-
                 results.add(element);
             }
         }
