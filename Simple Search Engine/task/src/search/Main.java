@@ -4,11 +4,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
+//  Map<K, V[]> can be replaced with multimap --- but there is no visible possibility due to eduTool proj
 public class Main {
 
     private enum Strategy{ALL, ANY, NONE}
 
     private static final Scanner sc = new Scanner(System.in);
+
+    private static final String regexSplitter = String.valueOf(Character.SPACE_SEPARATOR);
 
 
     public static void main(String[] args)  throws FileNotFoundException {
@@ -36,8 +39,9 @@ public class Main {
             for(String key: line) {
                 List<Integer> values = dataMap.get(key.toLowerCase(Locale.ROOT));
 
-                if(values == null)
+                if(values == null) {
                     values = new ArrayList<>();
+                }
 
                 values.add(i);
 
@@ -128,30 +132,18 @@ public class Main {
         System.out.println("Select a matching strategy: ALL, ANY, NONE");
         String strStrategy = sc.nextLine();
 
-        Strategy strategy;
-        switch (strStrategy){
-            case "ALL":
-                strategy = Strategy.ALL;
-                break;
-            case "ANY":
-                strategy = Strategy.ANY;
-                break;
-            case "NONE":
-                strategy = Strategy.NONE;
-                break;
-            default:
-                throw new IllegalArgumentException("Wrong strategy: " + strStrategy);
-        }
+        Strategy strategy = Strategy.valueOf(strStrategy);
 
         System.out.println("Enter a name or email to search all suitable people.");
         String target = sc.nextLine();
 
         List<String> results = computeQuery(data, dataMap, target, strategy);
 
-        if(results.size() > 0)
+        if(results.size() > 0) {
             results.forEach(System.out::println);
-        else
+        } else {
             System.out.println("No matching people found.");
+        }
 
     }
 
@@ -191,19 +183,21 @@ public class Main {
 
         Set<Integer> setInd = new TreeSet<>();
 
-        for(String target: targets.split(" ")) {
+        for(String target: targets.split( regexSplitter )) {
 
             List<Integer> list = dataMap.get(target.toLowerCase(Locale.ROOT));
 
-            if(list != null)
+            if(list != null) {
                 setInd.addAll(list);
+            }
         }
 
 
         for(int i = 0; i < data.size(); i++){
 
-            if(!setInd.contains(i))
+            if(!setInd.contains(i)) {
                 results.add(data.get(i));
+            }
         }
 
         return results;
@@ -214,7 +208,7 @@ public class Main {
 
         List<String> result = data;
 
-        for(String target: targets.split(" ")) {
+        for(String target: targets.split( regexSplitter )) {
 
             result = findAny(result, dataMap, target.toLowerCase(Locale.ROOT));
 
@@ -229,14 +223,15 @@ public class Main {
 
         Set<String> resultSet = new TreeSet<>();
 
-        for(String target: targets.split(" ")) {
+        for(String target: targets.split( regexSplitter )) {
 
             List<Integer> indexes = dataMap.get(target.toLowerCase(Locale.ROOT));
 
             if (indexes != null) {
 
-                for (int i : indexes)
+                for (int i : indexes) {
                     resultSet.add(data.get(i));
+                }
             }
         }
 
